@@ -15,7 +15,8 @@ const uploadOnCloudinary = async (localFilePath) => {
       folder: "YoutubeBackend",
     });
     // file has been upload successfully
-    console.log("file uploaded successfully :", response.url);
+    // console.log("file uploaded successfully :", response.url);
+    // fs.unlinkSync(localFilePath);
     return response;
   } catch (error) {
     fs.unlinkSync(localFilePath); // remove the locally saved temporary file as the upload operation got failed
