@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  changePassword,
   loginUser,
   logoutUser,
   registerUser,
@@ -17,5 +18,6 @@ router.route("/register").post(
 );
 router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logoutUser);
+router.route("/changePassword").post(verifyJWT, changePassword);
 // router.post("/register", registerUser); // another methode
 export default router;

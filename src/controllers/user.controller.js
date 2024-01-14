@@ -143,4 +143,30 @@ const logoutUser = asyncHandler(async (req, res) => {
     .clearCookie("refreshToken", options)
     .json(new ApiResponse(200, {}, "User logged Out"));
 });
-export { registerUser, loginUser, logoutUser };
+
+const changePassword = asyncHandler(async (req, res, next) => {
+  const { oldpssword, newPassword } = req.body;
+  // Check if the values are there or not
+  if (!oldpssword || !newPassword) {
+    throw new ApiError(400, "Old password and new password are required");
+  }
+  const user = await User.findById(req.user?.id);
+  // console.log(user);
+  // If no user then throw an error message
+  if (!user) {
+    throw new ApiError(400, "Invalid user id or user does not exist");
+  }
+  // Check if the old password is correct
+  const isValidPassword = await user.comparePassword(oldpssword);
+  if (!isValidPassword) {
+    throw new ApiError(400, "Invalid old password");
+  }
+  // Setting the new password
+  user.password = newPassword;
+  // Save the data in DB
+  await user.save({ validateBeforeSave: false });
+  res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Password successfully changed"));
+});
+export { registerUser, loginUser, logoutUser, changePassword };
