@@ -169,4 +169,20 @@ const changePassword = asyncHandler(async (req, res, next) => {
     .status(200)
     .json(new ApiResponse(200, {}, "Password successfully changed"));
 });
-export { registerUser, loginUser, logoutUser, changePassword };
+/**
+ * @FETCH_USER_DETAILS
+ * @ROUTE @POST {{URL}}/api/v1/users
+ * @ACCESS loggedin in user
+ */
+// Getuser details
+const userDetails = asyncHandler(async (req, res, next) => {
+  const user = await User.findById(req.user._id);
+  user.password = undefined;
+  user.refreshToken = undefined;
+  res.status(200).json({
+    success: true,
+    user,
+    message: "User details fetch successfully",
+  });
+});
+export { registerUser, loginUser, logoutUser, changePassword, userDetails };

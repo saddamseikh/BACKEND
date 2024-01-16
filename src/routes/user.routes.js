@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  userDetails,
 } from "../controllers/user.controller.js";
 const router = Router();
 import { upload } from "../middlewares/multer.middleware.js";
@@ -19,5 +20,5 @@ router.route("/register").post(
 router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/changePassword").post(verifyJWT, changePassword);
-// router.post("/register", registerUser); // another methode
+router.route("/me").post(verifyJWT, userDetails);
 export default router;
