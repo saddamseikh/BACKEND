@@ -185,4 +185,39 @@ const userDetails = asyncHandler(async (req, res, next) => {
     message: "User details fetch successfully",
   });
 });
-export { registerUser, loginUser, logoutUser, changePassword, userDetails };
+
+/**
+ * @UPDATE_USER_USERNAME_FULLNANE
+ * @ROUTE @POST {{URL}}/api/v1/users/update_user
+ * @ACCESS loggedin in user
+ */
+// Getuser details
+const updateUserDetails = asyncHandler(async (req, res) => {
+  const { username, fullName } = req.body;
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        username: username,
+        fullName: fullName,
+      },
+    },
+    { new: true }
+  );
+  user.password = undefined;
+  user.refreshToken = undefined;
+  res.status(200).json({
+    success: true,
+    message: "Updated user Name",
+    user,
+  });
+});
+
+export {
+  registerUser,
+  loginUser,
+  logoutUser,
+  changePassword,
+  userDetails,
+  updateUserDetails,
+};

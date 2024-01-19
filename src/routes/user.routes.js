@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUser,
   registerUser,
+  updateUserDetails,
   userDetails,
 } from "../controllers/user.controller.js";
 const router = Router();
@@ -21,4 +22,6 @@ router.route("/login").post(loginUser);
 router.route("/logout").post(verifyJWT, logoutUser);
 router.route("/changePassword").post(verifyJWT, changePassword);
 router.route("/me").post(verifyJWT, userDetails);
+// updater username
+router.route("/update_user").post(verifyJWT, updateUserDetails);
 export default router;
