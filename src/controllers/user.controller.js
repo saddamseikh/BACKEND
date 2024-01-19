@@ -212,6 +212,44 @@ const updateUserDetails = asyncHandler(async (req, res) => {
     user,
   });
 });
+/**
+ * @UPDATE_USER_USERNAME_FULLNANE
+ * @ROUTE @POST {{URL}}/api/v1/users/update_user
+ * @ACCESS loggedin in user
+ */
+// Getuser details
+
+const avatarImageUpdate = asyncHandler(async (req, res) => {
+  const avatarLocalPath = req.file?.path;
+  console.log(avatarLocalPath);
+
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar file is missing");
+  }
+
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  console.log(avatar.url);
+
+  if (!avatar.url) {
+    throw new ApiError(400, "Error while uploading on avatar");
+  }
+
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: {
+        avatar: avatar.url,
+      },
+    },
+    { new: true }
+  );
+  user.password = undefined;
+  user.refreshToken = undefined;
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Avatar image updated successfully"));
+});
 
 export {
   registerUser,
@@ -220,4 +258,5 @@ export {
   changePassword,
   userDetails,
   updateUserDetails,
+  avatarImageUpdate,
 };
