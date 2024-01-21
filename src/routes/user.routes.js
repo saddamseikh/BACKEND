@@ -6,6 +6,7 @@ import {
   logoutUser,
   registerUser,
   updateUserDetails,
+  updatedCoverImage,
   userDetails,
 } from "../controllers/user.controller.js";
 const router = Router();
@@ -28,4 +29,8 @@ router.route("/update_user").post(verifyJWT, updateUserDetails);
 router
   .route("/updateAvatar")
   .post(verifyJWT, upload.single("avatar"), avatarImageUpdate);
+
+router
+  .route("/updateCoverImage")
+  .post(verifyJWT, upload.single("coverImage"), updatedCoverImage);
 export default router;
